@@ -48,10 +48,12 @@ def insert_user(username: str, password: str):
     db.session.commit()
 
 def login(username: str, password: str) -> bool:
-    sql = "SELECT password FROM users WHERE username=:username"
+    sql = "SELECT id, password FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
 
-    if not result.fetchone():
+    user = result.fetchone()
+
+    if not user:
         return False
 
-    return check_password_hash(result.fetchone()[0], password)
+    return check_password_hash(user.password, password)
