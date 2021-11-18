@@ -19,4 +19,8 @@ def send_register():
     if users.register(request.form["username"], request.form["password"], request.form["confirm_password"]):
         return redirect("/")
     else:
-        return redirect("/register")
+        return redirect("/invalid_credentials")
+
+@app.route("/invalid_credentials")
+def invalid_credentials():
+    return render_template("invalid_credentials.html")

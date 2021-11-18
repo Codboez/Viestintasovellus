@@ -15,7 +15,7 @@ def register(username, password, confirmed_password) -> bool:
     if not passwords_match(password, confirmed_password):
         return False
 
-    insert_user()
+    insert_user(username, password)
     return True
 
 def username_exists(username: str) -> bool:
@@ -42,7 +42,7 @@ def is_password_valid(password: str) -> bool:
 def passwords_match(password: str, confirmed_password: str) -> bool:
     return password == confirmed_password
 
-def insert_user(username, password):
+def insert_user(username: str, password: str):
     sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
     db.session.execute(sql, {"username":username, "password":generate_password_hash(password)})
     db.session.commit()
