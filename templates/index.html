@@ -7,5 +7,12 @@
     <body>
         <p>Temporary login link: <a href="/login">login</a></p>
         <p>Temporary register link: <a href="/register">register</a></p>
+        <hr>
+        {% if session.username %}
+        <p>You are logged in as: {{ session.username }}</p>
+        <a href="/logout">Log out</a>
+        {% else %}
+        <p>You are not logged in</p>
+        {% endif %}
     </body>
 </html>

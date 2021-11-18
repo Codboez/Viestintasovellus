@@ -46,3 +46,12 @@ def insert_user(username: str, password: str):
     sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
     db.session.execute(sql, {"username":username, "password":generate_password_hash(password)})
     db.session.commit()
+
+def login(username: str, password: str) -> bool:
+    sql = "SELECT password FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username":username})
+
+    if not result.fetchone():
+        return False
+
+    return check_password_hash(result.fetchone()[0], password)
