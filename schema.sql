@@ -8,7 +8,8 @@ CREATE TABLE threads (
 	id SERIAL PRIMARY KEY,
 	creator_id INTEGER,
 	creation_time TIMESTAMP,
-	is_public BOOLEAN
+	is_public BOOLEAN,
+	name TEXT
 );
 
 CREATE TABLE messages (

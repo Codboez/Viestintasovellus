@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Viestintäsovellus</title>
+    </head>
+    <body>
+        <p>Thread id: {{ id }}, Created by: {{ creator }}, Created at: {{ creation_time }}</p>
+        <h1>{{ name }}</h1>
+        <hr>
+        {% for message in messages %}
+        <div>
+            <p>{{ message.message }}</p>
+        </div>
+        <p>Sender: {{ message.sender_id }}</p>
+        <p>Sent at: {{ message.creation_time }}</p>
+        <hr>
+        {% endfor %}
+    </body>
+</html>

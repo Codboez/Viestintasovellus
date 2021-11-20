@@ -16,9 +16,10 @@
         {% endif %}
         <hr>
         {% for thread in threads %}
-        <form action="/threads/1">
-            <button type="submit"></button>
+        <form action="/threads/{{ thread.id }}" method="POST">
+            <button type="submit" value="{{ thread.name }}"></button>
         </form>
         {% endfor %}
+        <a href="/threads/create">Create a new public thread</a>
     </body>
 </html>

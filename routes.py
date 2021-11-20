@@ -48,10 +48,21 @@ def thread(id: int):
     info = threads.get_thread_info(id)
 
     if threads.user_has_access(info):
-        return render_template("thread.html", id=id, messages=info[1], creator=info[0].username, creation_time=info[0].creation_time)
+        return render_template("thread.html", id=id, messages=info[1], creator=info[0].username, creation_time=info[0].creation_time, name=info[0].name)
     else:
         return redirect("/access_denied")
 
 @app.route("/access_denied")
 def access_denied():
     return render_template("access_denied.html")
+
+@app.route("/threads/create")
+def create_thread():
+    return render_template("create_thread.html")
+
+@app.route("/threads/create/send", methods=["POST"])
+def send_created_thread():
+    creator_id = users.get_id(session["username"])
+    threads.create_thread(creator_id, True, request.form["name"])
+    thread_id = threads.get_thread_amount()
+    return redirect("/threads/" + str(thread_id))

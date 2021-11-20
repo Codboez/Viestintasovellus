@@ -57,3 +57,8 @@ def login(username: str, password: str) -> bool:
         return False
 
     return check_password_hash(user.password, password)
+
+def get_id(username: str) -> int:
+    sql = "SELECT id FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username":username})
+    return int(result.fetchone().id)
