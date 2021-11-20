@@ -5,8 +5,8 @@ import threads
 
 @app.route("/")
 def index():
-    threads = threads.get_all_public_threads()
-    return render_template("index.html", threads=threads)
+    thread_list = threads.get_all_public_threads()
+    return render_template("index.html", threads=thread_list)
 
 @app.route("/register")
 def register():
