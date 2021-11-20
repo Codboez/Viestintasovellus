@@ -1,10 +1,12 @@
 from app import app
 from flask import redirect, render_template, request, session
 import users
+import threads
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    threads = threads.get_all_public_threads()
+    return render_template("index.html", threads=threads)
 
 @app.route("/register")
 def register():
@@ -40,3 +42,16 @@ def logout():
 @app.route("/invalid_credentials")
 def invalid_credentials():
     return render_template("invalid_credentials.html")
+
+@app.route("/threads/<int:id>")
+def thread(id: int):
+    info = threads.get_thread_info(id)
+
+    if threads.user_has_access(info):
+        return render_template("thread.html", id=id, messages=info[1], creator=info[0].username, creation_time=info[0].creation_time)
+    else:
+        return redirect("/access_denied")
+
+@app.route("/access_denied")
+def access_denied():
+    return render_template("access_denied.html")

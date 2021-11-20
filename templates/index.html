@@ -14,5 +14,11 @@
         {% else %}
         <p>You are not logged in</p>
         {% endif %}
+        <hr>
+        {% for thread in threads %}
+        <form action="/threads/a">
+            <button type="submit">a</button>
+        </form>
+        {% endfor %}
     </body>
 </html>
