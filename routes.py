@@ -76,6 +76,7 @@ def threads_send_message(id: int):
     message = request.form["message"]
 
     if threads.user_has_access(sender_id):
+        threads.send_message(id, sender_id, message)
         return redirect("/threads/" + str(id))
     else:
         return redirect("/access_denied")
