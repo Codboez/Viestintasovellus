@@ -4,7 +4,7 @@ def get_thread_info(id: int) -> tuple:
     sql = "SELECT u.username, t.creation_time, t.is_public, t.name FROM users u, threads t WHERE t.id=:id AND t.creator_id=u.id"
     thread = db.session.execute(sql, {"id":id})
 
-    sql = "SELECT m.message, u.sender_name, m.creation_time FROM messages m, users u WHERE thread_id=:id AND m.sender_id=u.id"
+    sql = "SELECT m.message, u.username, m.creation_time FROM messages m, users u WHERE thread_id=:id AND m.sender_id=u.id"
     messages = db.session.execute(sql, {"id":id})
 
     return (thread.fetchall()[0], messages.fetchall())
