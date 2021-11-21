@@ -43,7 +43,7 @@ def logout():
 def invalid_credentials():
     return render_template("invalid_credentials.html")
 
-@app.route("/threads/<int:id>")
+@app.route("/threads/<int:id>", methods=["GET", "POST"])
 def thread(id: int):
     info = threads.get_thread_info(id)
 

@@ -17,9 +17,14 @@
         <hr>
         {% for thread in threads %}
         <form action="/threads/{{ thread.id }}" method="POST">
-            <button type="submit" value="{{ thread.name }}"></button>
+            <button type="submit">{{ thread.name }}</button>
         </form>
+        <br>
         {% endfor %}
+        {% if session.username %}
         <a href="/threads/create">Create a new public thread</a>
+        {% else %}
+        <p>You must login to create new threads</p>
+        {% endif %}
     </body>
 </html>
