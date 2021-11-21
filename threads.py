@@ -4,11 +4,12 @@ def get_thread_info(id: int) -> tuple:
     sql = "SELECT u.username, t.creation_time, t.is_public, t.name FROM users u, threads t WHERE t.id=:id AND t.creator_id=u.id"
     thread = db.session.execute(sql, {"id":id})
 
-    sql = "SELECT message, sender_id, creation_time FROM messages WHERE thread_id=:id"
+    sql = "SELECT m.message, u.sender_name, m.creation_time FROM messages m, users u WHERE thread_id=:id AND m.sender_id=u.id"
     messages = db.session.execute(sql, {"id":id})
 
     return (thread.fetchall()[0], messages.fetchall())
 
+# Will do this later. Currently just sending random info here.
 def user_has_access(info) -> bool:
     return True
 
@@ -26,3 +27,8 @@ def get_thread_amount() -> int:
     sql = "SELECT COUNT(*) c FROM threads"
     result = db.session.execute(sql)
     return int(result.fetchone().c)
+
+def send_message(thread_id: int, sender_id: int, message: str):
+    sql = "INSERT INTO messages (message, sender_id, thread_id, creation_time) VALUES (:message, :sender_id, :thread_id, current_timestamp)"
+    db.session.execute(sql, {"message":message, "sender_id":sender_id, "thread_id":thread_id})
+    db.session.commit()

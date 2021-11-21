@@ -12,8 +12,12 @@
         <div>
             <p>{{ message.message }}</p>
         </div>
-        <p>Sender: {{ message.sender_id }}, Sent at: {{ message.creation_time }}</p>
+        <p>Sender: {{ message.sender_name }}, Sent at: {{ message.creation_time }}</p>
         <hr>
         {% endfor %}
+        <form action="/threads/{{ id }}/send_message" method="POST">
+            <textarea name="message" rows="8" columns="50"></textarea>
+            <input type="submit" value="Send message">
+        </form>
     </body>
 </html>

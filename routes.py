@@ -62,7 +62,20 @@ def create_thread():
 
 @app.route("/threads/create/send", methods=["POST"])
 def send_created_thread():
+    if "username" not in session:
+        return redirect("/access_denied")
+
     creator_id = users.get_id(session["username"])
     threads.create_thread(creator_id, True, request.form["name"])
     thread_id = threads.get_thread_amount()
     return redirect("/threads/" + str(thread_id))
+
+@app.route("/threads/<int:id>/send_message", methods=["POST"])
+def threads_send_message(id: int):
+    sender_id = users.get_id(session["username"])
+    message = request.form["message"]
+
+    if threads.user_has_access(sender_id):
+        return redirect("/threads/" + str(id))
+    else:
+        return redirect("/access_denied")
