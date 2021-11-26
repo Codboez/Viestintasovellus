@@ -8,11 +8,11 @@ def index():
     thread_list = threads.get_all_public_threads()
     return render_template("index.html", threads=thread_list)
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
     return render_template("register.html")
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
     return render_template("login.html")
 

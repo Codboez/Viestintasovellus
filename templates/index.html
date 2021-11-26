@@ -3,28 +3,51 @@
     <head>
         <meta charset="utf-8">
         <title>Viestintäsovellus</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css')}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <body>
-        <p>Temporary login link: <a href="/login">login</a></p>
-        <p>Temporary register link: <a href="/register">register</a></p>
-        <hr>
-        {% if session.username %}
-        <p>You are logged in as: {{ session.username }}</p>
-        <a href="/logout">Log out</a>
-        {% else %}
-        <p>You are not logged in</p>
-        {% endif %}
-        <hr>
-        {% for thread in threads %}
-        <form action="/threads/{{ thread.id }}" method="POST">
-            <button type="submit">{{ thread.name }}</button>
-        </form>
-        <br>
-        {% endfor %}
-        {% if session.username %}
-        <a href="/threads/create">Create a new public thread</a>
-        {% else %}
-        <p>You must login to create new threads</p>
-        {% endif %}
+    <body>     
+        <div class="topbar">
+            <div id="main-heading">
+                <p>Viestintäsovellus</p>
+            </div>
+            <div>
+                <button><i class="fa fa-bars"></i></button>
+            </div>
+            <div>
+                <form action="/login" method="POST">
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            <div>
+                <form action="/register" method="POST">
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="content">
+            <p>Temporary login link: <a href="/login">login</a></p>
+            <p>Temporary register link: <a href="/register">register</a></p>
+            <hr>
+            {% if session.username %}
+            <p>You are logged in as: {{ session.username }}</p>
+            <a href="/logout">Log out</a>
+            {% else %}
+            <p>You are not logged in</p>
+            {% endif %}
+            <hr>
+            {% for thread in threads %}
+            <form action="/threads/{{ thread.id }}" method="POST">
+                <button type="submit">{{ thread.name }}</button>
+            </form>
+            <br>
+            {% endfor %}
+            {% if session.username %}
+            <a href="/threads/create">Create a new public thread</a>
+            {% else %}
+            <p>You must login to create new threads</p>
+            {% endif %}
+        </div>
     </body>
 </html>
