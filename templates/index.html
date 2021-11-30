@@ -26,6 +26,29 @@
             </div>
             <div class="clearfix"></div>
         </div>
+        <div class="sidebar">
+            <h2>Friends</h2>
+            {% if session.username %}
+            <form method="GET">
+                <input class="searchbar" type="text" name="search" placeholder="search for friends">
+            </form>
+            {% if len(friends) == 0 %}
+            <p>You have not added any friends. Add friends below.</p>
+            {% else %}
+            {% for friend in friends %}
+            <button>friend.username</button>
+            {% endfor %}
+            {% endif %}
+            <hr>
+            <h3>Add friend</h3>
+            <form class="sidebar-form" action="/send_friend_request" method="POST">
+                <input class="searchbar" type="text" name="username" placeholder="Enter username">
+                <button id="add-friend" type="submit">Send friend request</button>
+            </form>
+            {% else %}
+            <p>Log in to access friend list</p>
+            {% endif %}
+        </div>
         <div class="content">
             <p>Temporary login link: <a href="/login">login</a></p>
             <p>Temporary register link: <a href="/register">register</a></p>
@@ -48,6 +71,9 @@
             {% else %}
             <p>You must login to create new threads</p>
             {% endif %}
+        </div>
+        </div>
+        </div>
         </div>
     </body>
 </html>

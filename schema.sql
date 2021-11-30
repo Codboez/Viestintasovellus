@@ -25,3 +25,7 @@ CREATE TABLE thread_users (
 	thread_id INTEGER
 );
 
+CREATE TABLE friends (
+	user_id INTEGER,
+	friend_id INTEGER
+);

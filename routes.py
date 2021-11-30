@@ -6,7 +6,11 @@ import threads
 @app.route("/")
 def index():
     thread_list = threads.get_all_public_threads()
-    return render_template("index.html", threads=thread_list)
+    friends = []
+    if "username" in session:
+        friends = users.get_friends(users.get_id(session["username"]))
+
+    return render_template("index.html", threads=thread_list, friends=friends)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

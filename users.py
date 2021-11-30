@@ -62,3 +62,8 @@ def get_id(username: str) -> int:
     sql = "SELECT id FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     return int(result.fetchone().id)
+
+def get_friends(id: str):
+    sql = "SELECT u.id, u.username FROM users u, friends f WHERE u.id=f.friend_id AND f.user_id=:id"
+    result = db.session.execute(sql, {"id":id})
+    return result.fetchall()
