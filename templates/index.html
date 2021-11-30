@@ -32,7 +32,7 @@
             <form method="GET">
                 <input class="searchbar" type="text" name="search" placeholder="search for friends">
             </form>
-            {% if len(friends) == 0 %}
+            {% if friends|length == 0 %}
             <p>You have not added any friends. Add friends below.</p>
             {% else %}
             {% for friend in friends %}
