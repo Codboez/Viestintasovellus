@@ -14,7 +14,7 @@ def user_has_access(info) -> bool:
     return True
 
 def get_all_public_threads() -> list:
-    sql = "SELECT * FROM threads WHERE is_public=TRUE;"
+    sql = "SELECT to_char(t.creation_time, 'yyyy-MM-dd HH24:MI'), t.name, u.username FROM threads t, users u WHERE t.creator_id=u.id AND is_public=TRUE;"
     result = db.session.execute(sql)
     return result.fetchall()
 

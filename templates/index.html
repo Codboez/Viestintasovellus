@@ -3,7 +3,8 @@
     <head>
         <meta charset="utf-8">
         <title>Viestintäsovellus</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='index.css')}}">
+        <link rel="stylesheet" href="../static/index.css">
+        <!-- {{ url_for('static', filename='index.css')}} -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>     
@@ -36,7 +37,7 @@
             <p>You have not added any friends. Add friends below.</p>
             {% else %}
             {% for friend in friends %}
-            <button>friend.username</button>
+            <button>{{ friend.username }}</button>
             {% endfor %}
             {% endif %}
             <hr>
@@ -60,9 +61,21 @@
             <p>You are not logged in</p>
             {% endif %}
             <hr>
+            <h1>Threads</h1>
+            <div class="thread-labels">
+                <p class="thread-name">Name</p>
+                <p class="thread-creator">Creator</p>
+                <p class="thread-date">Creation date</p>
+            </div>         
+            <div class="clearfix"></div>
+            <hr>
             {% for thread in threads %}
             <form action="/threads/{{ thread.id }}" method="POST">
-                <button type="submit">{{ thread.name }}</button>
+                <button class ="thread-button" type="submit">
+                    <p class="thread-name" id="thread-name">{{ thread.name }}</p>
+                    <p class="thread-creator" id="thread-creator">{{ thread.username }}</p>
+                    <p class="thread-date" id="thread-date">{{ thread.creation_time }}</p>
+                </button>
             </form>
             <br>
             {% endfor %}
@@ -71,9 +84,6 @@
             {% else %}
             <p>You must login to create new threads</p>
             {% endif %}
-        </div>
-        </div>
-        </div>
         </div>
     </body>
 </html>
