@@ -114,6 +114,7 @@ p {
 }
 
 .thread-date {
+    width: 25%;
     overflow-x: hidden;
     text-align: left;
     float: left;
