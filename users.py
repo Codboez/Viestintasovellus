@@ -82,3 +82,24 @@ def send_friend_request(user1_id: int, user2_id: int):
     sql = "INSERT INTO friend_requests (sender_id, recipient_id) VALUES (:id1, :id2);"
     db.session.execute(sql, {"id1":user1_id, "id2":user2_id})
     db.session.commit()
+
+def get_friend_requests(user_id: int):
+    sql = "SELECT u.id, u.username FROM users u, friend_requests f WHERE u.id=f.sender_id AND f.recipient_id=:id"
+    result = db.session.execute(sql, {"id":user_id})
+    return result.fetchall()
+
+def add_friend(id1: int, id2: int):
+    sql = "INSERT INTO friends (user_id, friend_id) VALUES (:id1, :id2);"
+    db.session.execute(sql, {"id1":id1, "id2":id2})
+    db.session.execute(sql, {"id1":id2, "id2":id1})
+    db.session.commit()
+
+def remove_friend_request(sender_id: int, recipient_id: int):
+    sql = "DELETE FROM friend_requests WHERE sender_id=:sender_id AND recipient_id=:recipient_id;"
+    db.session.execute(sql, {"sender_id":sender_id, "recipient_id":recipient_id})
+    db.session.commit()
+
+def friend_request_exists(sender_id: int, recipient_id: int):
+    sql = "SELECT * FROM friend_requests WHERE (sender_id=:sender_id AND recipient_id=:recipient_id) OR (sender_id=:recipient_id AND recipient_id=:sender_id);"
+    result = db.session.execute(sql, {"sender_id":sender_id, "recipient_id":recipient_id})
+    return result.fetchone()

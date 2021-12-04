@@ -7,10 +7,15 @@ import threads
 def index():
     thread_list = threads.get_all_public_threads()
     friends = []
+    friend_requests = []
     if "username" in session:
         friends = users.get_friends(users.get_id(session["username"]))
+        friend_requests = users.get_friend_requests(users.get_id(session["username"]))
 
-    return render_template("index.html", threads=thread_list, friends=friends)
+    tab = request.args.get("tab")
+    friend_request_message = request.args.get("friend_request")
+    
+    return render_template("index.html", threads=thread_list, friends=friends, tab=tab, requests=friend_requests, friend_request=friend_request_message)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -89,12 +94,31 @@ def threads_send_message(id: int):
 def send_friend_request():
     sender_name = session["username"]
     recipient_name = request.form["username"]
+    sender_id = users.get_id(sender_name)
+    recipient_id = users.get_id(recipient_name)
+
+    if sender_name == recipient_name:
+        return redirect("/", friend_request="self")
 
     if not users.username_exists(recipient_name):
         return redirect("/", friend_request="invalid_username")
 
-    if users.has_friend(users.get_id(sender_name), users.get_id(recipient_name)):
-        return redirect("/", friend_request="is_friend")
+    if users.has_friend(sender_id, recipient_id):
+        return redirect("/", friend_request="friend_exists")
 
-    users.send_friend_request()
+    if users.friend_request_exists(sender_id, recipient_id):
+        return redirect("/", friend_request="friend_request_exists")
+
+    users.send_friend_request(sender_id, recipient_id)
     return redirect("/", friend_request="sent")
+
+@app.route("/send_friend_request_answer", methods=["POST"])
+def send_friend_request_answer():
+    answer = request.form["request_answer"]
+    user_id = users.get_id(session["username"])
+    friend_id = request.form["friend_id"]
+
+    if answer == "accept":
+        users.add_friend(user_id, friend_id)
+    elif answer == "decline":
+        pass
