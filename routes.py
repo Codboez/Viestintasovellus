@@ -1,5 +1,5 @@
 from app import app
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, url_for
 import users
 import threads
 
@@ -98,19 +98,19 @@ def send_friend_request():
     recipient_id = users.get_id(recipient_name)
 
     if sender_name == recipient_name:
-        return redirect("/", friend_request="self")
+        return redirect(url_for(".index", friend_request="self"))
 
     if not users.username_exists(recipient_name):
-        return redirect("/", friend_request="invalid_username")
+        return redirect(url_for(".index", friend_request="invalid_username"))
 
     if users.has_friend(sender_id, recipient_id):
-        return redirect("/", friend_request="friend_exists")
+        return redirect(url_for(".index", friend_request="friend_exists"))
 
     if users.friend_request_exists(sender_id, recipient_id):
-        return redirect("/", friend_request="friend_request_exists")
+        return redirect(url_for(".index", friend_request="friend_request_exists"))
 
     users.send_friend_request(sender_id, recipient_id)
-    return redirect("/", friend_request="sent")
+    return redirect(url_for(".index", friend_request="sent"))
 
 @app.route("/send_friend_request_answer", methods=["POST"])
 def send_friend_request_answer():
@@ -120,5 +120,8 @@ def send_friend_request_answer():
 
     if answer == "accept":
         users.add_friend(user_id, friend_id)
+        users.remove_friend_request(friend_id, user_id)
     elif answer == "decline":
-        pass
+        users.remove_friend_request(friend_id, user_id)
+
+    return redirect("/")

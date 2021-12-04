@@ -58,14 +58,12 @@
                     {% else %}
                         {% for request in requests %}
                             <div class="friend-request">
-                                <p>
-                                    {{ request.username }}
-                                    <form action="/send_friend_request_answer" method="POST">
-                                        <button id="friend-request-accept" name="request_answer" value="accept"><i class="fa fa-check"></i></button>
-                                        <button id="friend-request-decline" name="request_answer" value="decline"><i class="fa fa-times"></i></button>
-                                        <input type="hidden" name="friend_id" value="{{ request.id }}">
-                                    </form>
-                                </p>
+                                <p>{{ request.username }}</p>     
+                                <form action="/send_friend_request_answer" method="POST">
+                                    <button id="friend-request-accept" name="request_answer" value="accept"><i class="fa fa-check"></i></button>
+                                    <button id="friend-request-decline" name="request_answer" value="decline"><i class="fa fa-times"></i></button>
+                                    <input type="hidden" name="friend_id" value="{{ request.id }}">
+                                </form>
                             </div>
                         {% endfor %}
                     {% endif %}
