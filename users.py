@@ -63,7 +63,22 @@ def get_id(username: str) -> int:
     result = db.session.execute(sql, {"username":username})
     return int(result.fetchone().id)
 
-def get_friends(id: str):
+def get_friends(id: int):
     sql = "SELECT u.id, u.username FROM users u, friends f WHERE u.id=f.friend_id AND f.user_id=:id"
     result = db.session.execute(sql, {"id":id})
     return result.fetchall()
+
+def has_friend(user1_id: int, user2_id: int) -> bool:
+    sql = "SELECT * FROM friends WHERE user_id=:id1 AND friend_id=:id2;"
+    result = db.session.execute(sql, {"id1":user1_id, "id2":user2_id})
+    return result.fetchone()
+
+def username_exists(username: str) -> bool:
+    sql = "SELECT * FROM users WHERE username=:username;"
+    result = db.session.execute(sql, {"username":username})
+    return result.fetchone()
+
+def send_friend_request(user1_id: int, user2_id: int):
+    sql = "INSERT INTO friend_requests (sender_id, recipient_id) VALUES (:id1, :id2);"
+    db.session.execute(sql, {"id1":user1_id, "id2":user2_id})
+    db.session.commit()

@@ -84,3 +84,17 @@ def threads_send_message(id: int):
         return redirect("/threads/" + str(id))
     else:
         return redirect("/access_denied")
+
+@app.route("/send_friend_request", methods=["POST"])
+def send_friend_request():
+    sender_name = session["username"]
+    recipient_name = request.form["username"]
+
+    if not users.username_exists(recipient_name):
+        return redirect("/", friend_request="invalid_username")
+
+    if users.has_friend(users.get_id(sender_name), users.get_id(recipient_name)):
+        return redirect("/", friend_request="is_friend")
+
+    users.send_friend_request()
+    return redirect("/", friend_request="sent")

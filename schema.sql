@@ -29,3 +29,8 @@ CREATE TABLE friends (
 	user_id INTEGER,
 	friend_id INTEGER
 );
+
+CREATE TABLE friend_requests (
+	sender_id INTEGER,
+	recipient_id INTEGER
+);

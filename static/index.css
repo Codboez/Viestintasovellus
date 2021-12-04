@@ -114,7 +114,7 @@ p {
 }
 
 .thread-date {
-    width: 25%;
+    width: 15%;
     overflow-x: hidden;
     text-align: left;
     float: left;
@@ -122,6 +122,22 @@ p {
 
 .thread-labels {
     font-size: 18px;
+}
+
+.red-text {
+    color: red;
+}
+
+.green-text {
+    color: green;
+}
+
+.friend-request p{
+    font-size: 14px;
+    padding: 10px;
+    display: inline;
+    overflow-x: hidden;
+    width: 60%;
 }
 
 #main-heading p {
@@ -147,4 +163,12 @@ p {
 
 #thread-date {
     font-size: 14px;
+}
+
+#friend-request-accept {
+    width: 15%;
+}
+
+#friend-request-decline {
+    width: 15%;
 }
