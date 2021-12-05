@@ -103,9 +103,11 @@
             <hr>
             <h1>Threads</h1>
             {% if session.username %}
-                <form action="/threads/create" method="POST">
-                    <button id="create-thread" type="submit">Create a new public thread</button>
-                </form>
+                <div>
+                    <form action="/threads/create" method="POST">
+                        <button id="create-thread" type="submit">Create a new public thread</button>
+                    </form>
+                </div>
             {% else %}
                 <p>You must login to create new threads</p>
             {% endif %}
@@ -123,6 +125,7 @@
                         <p class="thread-creator" id="thread-creator">{{ thread.username }}</p>
                         <p class="thread-date" id="thread-date">{{ thread.creation_date }}</p>
                     </button>
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 </form>
             {% endfor %}
         </div>

@@ -68,7 +68,7 @@ def thread(id: int):
 def access_denied():
     return render_template("access_denied.html")
 
-@app.route("/threads/create")
+@app.route("/threads/create", methods=["GET", "POST"])
 def create_thread():
     return render_template("create_thread.html")
 
