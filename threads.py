@@ -11,9 +11,9 @@ def get_thread_info(id: int) -> tuple:
     return (thread.fetchall()[0], messages.fetchall())
 
 def user_has_access(thread_id, csrf_token) -> bool:
-    is_public = is_public(thread_id)
+    is_thread_public = is_public(thread_id)
 
-    if is_public:
+    if is_thread_public:
         return True
 
     if "username" not in session:
@@ -37,7 +37,7 @@ def create_thread(creator_id, is_public, name) -> int:
     sql = "INSERT INTO threads (creator_id, creation_time, is_public, name) VALUES (:creator_id, current_timestamp, :is_public, :name) RETURNING id;"
     result = db.session.execute(sql, {"creator_id":creator_id, "is_public":is_public, "name":name})
     db.session.commit()
-    return result
+    return int(result.id)
 
 def get_thread_amount() -> int:
     sql = "SELECT COUNT(*) c FROM threads"
@@ -59,7 +59,7 @@ def create_private_thread(user_id: int, friend_id: int) -> int:
     friend_name = users.get_username(friend_id)
 
     thread_id = create_thread(user_id, False, f"{user_name}, {friend_name}")
-    
+
     add_thread_user(user_id, thread_id)
     add_thread_user(friend_id, thread_id)
 
