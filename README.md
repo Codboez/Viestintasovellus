@@ -24,4 +24,4 @@ Puutteet:
   * Etusivulla julkisia viestiketjuja ei vielä voi asettaa viestiketjuja haluamaansa järjestykseen tai hakea tiettyä viestiketjua.
   * Joidenkin sivujen ulkonäköä ei ole vielä tehty kunnolla.
   * Oikeassa yläkulmassa sijaitseva valikkonappula ei vielä tee mitään.
-  * Sivupalkissa on kavereiden nopeaan etsimiseen tarkoitettu hakupalkki ei vielä tee mitään.
+  * Sivupalkissa on kavereiden nopeaan etsimiseen tarkoitettu hakupalkki, joka ei vielä tee mitään.
