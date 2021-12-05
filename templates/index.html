@@ -38,8 +38,8 @@
             <h2>Friends</h2>
             {% if session.username %}
                 <form action="/" method="GET">
-                    <button type="submit" name="tab" value="friends">Friends</button>
-                    <button type="submit" name="tab" value="requests">Requests</button>
+                    <button class="tab-button" type="submit" name="tab" value="friends">Friends</button>
+                    <button class="tab-button" type="submit" name="tab" value="requests">Requests</button>
                 </form>          
                 {% if tab == "friends" %}
                     <form method="GET">
@@ -102,6 +102,13 @@
             {% endif %}
             <hr>
             <h1>Threads</h1>
+            {% if session.username %}
+                <form action="/threads/create" method="POST">
+                    <button id="create-thread" type="submit">Create a new public thread</button>
+                </form>
+            {% else %}
+                <p>You must login to create new threads</p>
+            {% endif %}
             <div class="thread-labels">
                 <p class="thread-name">Name</p>
                 <p class="thread-creator">Creator</p>
@@ -118,11 +125,6 @@
                     </button>
                 </form>
             {% endfor %}
-            {% if session.username %}
-                <a href="/threads/create">Create a new public thread</a>
-            {% else %}
-                <p>You must login to create new threads</p>
-            {% endif %}
         </div>
     </body>
 </html>

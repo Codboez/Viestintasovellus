@@ -28,10 +28,11 @@ def login():
 
 @app.route("/register/send", methods=["POST"])
 def send_register():
-    if users.register(request.form["username"], request.form["password"], request.form["confirm_password"]):
+    register_complete = users.register(request.form["username"], request.form["password"], request.form["confirm_password"])
+    if register_complete[0]:
         return redirect("/")
     else:
-        return redirect("/invalid_credentials")
+        return redirect(url_for(".register", error=register_complete[1]))
 
 @app.route("/login/send", methods=["POST"])
 def send_login():
@@ -43,7 +44,7 @@ def send_login():
         session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
     else:
-        return redirect("/invalid_credentials")
+        return redirect(url_for(".login", error="invalid username or password"))
 
 @app.route("/logout", methods=["POST"])
 def logout():

@@ -51,11 +51,14 @@ p {
 }
 
 .sidebar button {
-    width: 100%;
+    width: 95%;
     font-size: 16px;
     padding: 10px 0px;
     border: none;
-    background-color: #ddd;
+    background-color: #999;
+    margin-left: 5px;
+    margin-bottom: 3px;
+    border-radius: 10px;
 }
 
 .sidebar button:hover {
@@ -140,6 +143,25 @@ p {
     width: 60%;
 }
 
+.sidebar .tab-button {
+    display: inline;
+    width: 40%;
+    margin-left: 10px;
+}
+
+#create-thread {
+    background-color: #99a;
+    padding: 10px;
+    float: left;
+    border: none;
+    border-radius: 10px;
+    color: white;
+}
+
+#create-thread:hover {
+    background-color: #aab;
+}
+
 #main-heading p {
     margin: 0px;
     width: 40%;
@@ -151,6 +173,10 @@ p {
     width: 80%;
     margin-left: 10%;
     border-radius: 5px;
+}
+
+#add-friend:hover {
+    background-color: #0a0;
 }
 
 #thread-name {

@@ -2,21 +2,22 @@ from db import db
 import re
 from werkzeug.security import check_password_hash, generate_password_hash
 
-def register(username, password, confirmed_password) -> bool:
+def register(username, password, confirmed_password) -> tuple:
     if len(username) < 1 or len(username) > 32:
-        return False
+        return (False, "Username must be between 1 and 32 characters long")
 
     if username_exists(username):
-        return False
+        return (False, "This username already exists")
 
-    if not is_password_valid(password):
-        return False
+    is_password_valid = is_password_valid(password)
+    if not is_password_valid[0]:
+        return (False, is_password_valid[1])
 
     if not passwords_match(password, confirmed_password):
-        return False
+        return (False, "Passwords do not match")
 
     insert_user(username, password)
-    return True
+    return (True, "")
 
 def username_exists(username: str) -> bool:
     sql = "SELECT username FROM users WHERE username=:username"
@@ -24,20 +25,20 @@ def username_exists(username: str) -> bool:
 
     return result.fetchone()
 
-def is_password_valid(password: str) -> bool:
+def is_password_valid(password: str) -> tuple:
     if len(password) > 32 or len(password) < 8:
-        return False
+        return (False, "Password must be between 8 and 32 characters long"
 
     if not re.search("\d", password):
-        return False
+        return (False, "Password must contain a number, lower case and an upper case character")
 
     if not re.search("[a-z]", password):
-        return False
+        return (False, "Password must contain a number, lower case and an upper case character")
 
     if not re.search("[A-Z]", password):
-        return False
+        return (False, "Password must contain a number, lower case and an upper case character")
 
-    return True
+    return (True, "")
 
 def passwords_match(password: str, confirmed_password: str) -> bool:
     return password == confirmed_password

@@ -1,0 +1,27 @@
+form {
+    width: 20%;
+    margin-left: 40%;
+    margin-top: 200px;
+    background-color: #ddd;
+    padding-top: 40px;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+input {
+    width: 85%;
+    border: none;
+    padding: 10px;
+    margin-left: 5%;
+    margin-top: 15px;
+}
+
+input[type=submit] {
+    width: 90%;
+    background-color: #99a;
+    margin-bottom: 20px;
+}
+
+p {
+    text-align: center;
+}

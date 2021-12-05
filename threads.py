@@ -49,7 +49,7 @@ def send_message(thread_id: int, sender_id: int, message: str):
     db.session.commit()
 
 def get_private_thread(user_id: int, friend_id: int):
-    sql = "SELECT thread_id FROM thread_users WHERE user_id=:user_id OR user_id=_friend_id GROUP BY thread_id HAVING COUNT(*)=2;"
+    sql = "SELECT thread_id FROM thread_users WHERE user_id=:user_id OR user_id=:friend_id GROUP BY thread_id HAVING COUNT(*)=2;"
     result = db.session.execute(sql, {"user_id":user_id, "friend_id":friend_id})
     return result.fetchone()
 
