@@ -152,7 +152,7 @@ p {
 #create-thread {
     background-color: #99a;
     padding: 10px;
-    float: left;
+    display: block;
     border: none;
     border-radius: 10px;
     color: white;

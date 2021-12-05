@@ -37,7 +37,7 @@ def create_thread(creator_id, is_public, name) -> int:
     sql = "INSERT INTO threads (creator_id, creation_time, is_public, name) VALUES (:creator_id, current_timestamp, :is_public, :name) RETURNING id;"
     result = db.session.execute(sql, {"creator_id":creator_id, "is_public":is_public, "name":name})
     db.session.commit()
-    return int(result.id)
+    return int(result.fetchone().id)
 
 def get_thread_amount() -> int:
     sql = "SELECT COUNT(*) c FROM threads"
@@ -81,4 +81,4 @@ def create_and_get_private_thread(user_id: int, friend_id: int) -> int:
 def is_public(thread_id: int) -> bool:
     sql = "SELECT is_public FROM threads WHERE id=:id"
     result = db.session.execute(sql, {"id":thread_id})
-    return result.is_public
+    return result.fetchone().is_public
