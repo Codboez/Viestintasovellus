@@ -9,9 +9,9 @@ def register(username, password, confirmed_password) -> tuple:
     if username_exists(username):
         return (False, "This username already exists")
 
-    is_password_valid = is_password_valid(password)
-    if not is_password_valid[0]:
-        return (False, is_password_valid[1])
+    password_valid = is_password_valid(password)
+    if not password_valid[0]:
+        return (False, password_valid[1])
 
     if not passwords_match(password, confirmed_password):
         return (False, "Passwords do not match")

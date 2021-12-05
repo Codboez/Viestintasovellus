@@ -20,11 +20,11 @@ def index():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    return render_template("register.html", error=request.args.get("error"))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    return render_template("login.html", error=request.args.get("error"))
 
 @app.route("/register/send", methods=["POST"])
 def send_register():
@@ -146,6 +146,6 @@ def get_private_thread():
     thread_id = threads.create_and_get_private_thread(user_id, friend_id)
 
     if threads.user_has_access(thread_id, request.form["csrf_token"]):
-        return redirect("/threads/" + str(thread_id))
+        return redirect("/threads/" + str(thread_id), code=307)
     else:
         abort(403)

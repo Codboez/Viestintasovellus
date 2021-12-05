@@ -30,3 +30,7 @@ p {
     text-align: center;
     margin-left: 45%;
 }
+
+.red-text {
+    color: red;
+}
