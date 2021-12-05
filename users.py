@@ -103,3 +103,8 @@ def friend_request_exists(sender_id: int, recipient_id: int):
     sql = "SELECT * FROM friend_requests WHERE (sender_id=:sender_id AND recipient_id=:recipient_id) OR (sender_id=:recipient_id AND recipient_id=:sender_id);"
     result = db.session.execute(sql, {"sender_id":sender_id, "recipient_id":recipient_id})
     return result.fetchone()
+
+def get_username(id: int) -> str:
+    sql = "SELECT username FROM users WHERE id=:id"
+    result = db.session.execute(sql, {"id":id})
+    return str(result.fetchone().username)

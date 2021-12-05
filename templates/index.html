@@ -9,7 +9,9 @@
     <body>     
         <div class="topbar">
             <div id="main-heading">
-                <p>Viestintäsovellus</p>
+                <form action="/" method="POST">
+                    <button>Viestintäsovellus</button>
+                </form>
             </div>
             <div>
                 <button><i class="fa fa-bars"></i></button>
@@ -49,7 +51,10 @@
                         <p>You have not added any friends. Add friends below.</p>
                     {% else %}
                         {% for friend in friends %}
-                            <button>{{ friend.username }}</button>
+                            <form action="/threads/get_private_thread">
+                                <button type="submit" name="friend_id" value="{{ friend.id }}">{{ friend.username }}</button>
+                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            </form>
                         {% endfor %}
                     {% endif %}
                 {% elif tab == "requests" %}
@@ -63,6 +68,7 @@
                                     <button id="friend-request-accept" name="request_answer" value="accept"><i class="fa fa-check"></i></button>
                                     <button id="friend-request-decline" name="request_answer" value="decline"><i class="fa fa-times"></i></button>
                                     <input type="hidden" name="friend_id" value="{{ request.id }}">
+                                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                                 </form>
                             </div>
                         {% endfor %}
@@ -84,18 +90,15 @@
                 <form class="sidebar-form" action="/send_friend_request" method="POST">
                     <input class="searchbar" type="text" name="username" placeholder="Enter username">
                     <button id="add-friend" type="submit">Send friend request</button>
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 </form>
             {% else %}
                 <p>Log in to access friend list</p>
             {% endif %}
         </div>
         <div class="content">
-            <p>Temporary login link: <a href="/login">login</a></p>
-            <p>Temporary register link: <a href="/register">register</a></p>
-            <hr>
             {% if session.username %}
                 <p>You are logged in as: {{ session.username }}</p>
-                <a href="/logout">Log out</a>
             {% else %}
                 <p>You are not logged in</p>
             {% endif %}

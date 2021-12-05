@@ -2,8 +2,9 @@ from app import app
 from flask import redirect, render_template, request, session, url_for
 import users
 import threads
+import secrets
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
     thread_list = threads.get_all_public_threads()
     friends = []
@@ -39,11 +40,12 @@ def send_login():
 
     if users.login(username, password):
         session["username"] = username
+        session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
     else:
         return redirect("/invalid_credentials")
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
 def logout():
     del session["username"]
     return redirect("/")
@@ -52,14 +54,14 @@ def logout():
 def invalid_credentials():
     return render_template("invalid_credentials.html")
 
-@app.route("/threads/<int:id>", methods=["GET", "POST"])
+@app.route("/threads/<int:id>", methods=["POST"])
 def thread(id: int):
     info = threads.get_thread_info(id)
 
-    if threads.user_has_access(info):
+    if threads.user_has_access(id, request.form["csrf_token"]):
         return render_template("thread.html", id=id, messages=info[1], creator=info[0].username, creation_time=info[0].creation_time, name=info[0].name)
     else:
-        return redirect("/access_denied")
+        abort(403)
 
 @app.route("/access_denied")
 def access_denied():
@@ -72,7 +74,7 @@ def create_thread():
 @app.route("/threads/create/send", methods=["POST"])
 def send_created_thread():
     if "username" not in session:
-        return redirect("/access_denied")
+        return abort(403)
 
     creator_id = users.get_id(session["username"])
     threads.create_thread(creator_id, True, request.form["name"])
@@ -84,11 +86,14 @@ def threads_send_message(id: int):
     sender_id = users.get_id(session["username"])
     message = request.form["message"]
 
-    if threads.user_has_access(sender_id):
+    if "username" not in session:
+        abort(403)
+
+    if threads.user_has_access(id, request.form["csrf_token"]):
         threads.send_message(id, sender_id, message)
         return redirect("/threads/" + str(id))
     else:
-        return redirect("/access_denied")
+        return abort(403)
 
 @app.route("/send_friend_request", methods=["POST"])
 def send_friend_request():
@@ -96,6 +101,9 @@ def send_friend_request():
     recipient_name = request.form["username"]
     sender_id = users.get_id(sender_name)
     recipient_id = users.get_id(recipient_name)
+
+    if session["csrf_token"] != form.request["csrf_token"]:
+        abort(403)
 
     if sender_name == recipient_name:
         return redirect(url_for(".index", friend_request="self"))
@@ -118,6 +126,9 @@ def send_friend_request_answer():
     user_id = users.get_id(session["username"])
     friend_id = request.form["friend_id"]
 
+    if session["csrf_token"] != form.request["csrf_token"]:
+        abort(403)
+
     if answer == "accept":
         users.add_friend(user_id, friend_id)
         users.remove_friend_request(friend_id, user_id)
@@ -125,3 +136,14 @@ def send_friend_request_answer():
         users.remove_friend_request(friend_id, user_id)
 
     return redirect("/")
+
+@app.route("/threads/get_private_thread", methods=["POST"])
+def get_private_thread():
+    user_id = users.get_id(session["username"])
+    friend_id = request.form["friend_id"]
+    thread_id = threads.create_and_get_private_thread(user_id, friend_id)
+
+    if threads.user_has_access(thread_id, request.form["csrf_token"]):
+        return redirect("/threads/" + str(thread_id))
+    else:
+        abort(403)
