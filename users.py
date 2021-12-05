@@ -27,7 +27,7 @@ def username_exists(username: str) -> bool:
 
 def is_password_valid(password: str) -> tuple:
     if len(password) > 32 or len(password) < 8:
-        return (False, "Password must be between 8 and 32 characters long"
+        return (False, "Password must be between 8 and 32 characters long")
 
     if not re.search("\d", password):
         return (False, "Password must contain a number, lower case and an upper case character")
