@@ -99,10 +99,8 @@ def threads_send_message(id: int):
 def send_friend_request():
     sender_name = session["username"]
     recipient_name = request.form["username"]
-    sender_id = users.get_id(sender_name)
-    recipient_id = users.get_id(recipient_name)
 
-    if session["csrf_token"] != form.request["csrf_token"]:
+    if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
 
     if sender_name == recipient_name:
@@ -110,6 +108,9 @@ def send_friend_request():
 
     if not users.username_exists(recipient_name):
         return redirect(url_for(".index", friend_request="invalid_username"))
+
+    sender_id = users.get_id(sender_name)
+    recipient_id = users.get_id(recipient_name) 
 
     if users.has_friend(sender_id, recipient_id):
         return redirect(url_for(".index", friend_request="friend_exists"))
@@ -126,7 +127,7 @@ def send_friend_request_answer():
     user_id = users.get_id(session["username"])
     friend_id = request.form["friend_id"]
 
-    if session["csrf_token"] != form.request["csrf_token"]:
+    if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
 
     if answer == "accept":
