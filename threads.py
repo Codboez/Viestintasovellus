@@ -77,7 +77,7 @@ def create_and_get_private_thread(user_id: int, friend_id: int) -> int:
     if not thread:
         return create_private_thread(user_id, friend_id)
     else:
-        return thread.id
+        return thread.thread_id
 
 def is_public(thread_id: int) -> bool:
     sql = "SELECT is_public FROM threads WHERE id=:id"
