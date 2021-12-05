@@ -1,5 +1,6 @@
 from db import db
 import users
+from flask import session
 
 def get_thread_info(id: int) -> tuple:
     sql = "SELECT u.username, t.creation_time, t.is_public, t.name FROM users u, threads t WHERE t.id=:id AND t.creator_id=u.id"
