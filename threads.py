@@ -30,10 +30,16 @@ def user_has_access(thread_id, csrf_token) -> bool:
     return bool(result.fetchone())
 
 def get_all_public_threads(sort: tuple) -> list:
+    if sort[0] != "name" and sort[0] != "username" and sort[0] != "creation_time":
+        abort(403)
+
+    if sort[1] != "ASC" and sort[1] != "DESC":
+        abort(403)
+
     sort_sql = sort[0] + " " + sort[1]
     sql = ("SELECT t.id, to_char(t.creation_time, 'yyyy-MM-dd HH24:MI') as creation_date, t.name, u.username"
-        " FROM threads t, users u WHERE t.creator_id=u.id AND t.is_public=TRUE ORDER BY :sort;")
-    result = db.session.execute(sql, {"sort":sort_sql})
+        " FROM threads t, users u WHERE t.creator_id=u.id AND t.is_public=TRUE ORDER BY " + sort_sql)
+    result = db.session.execute(sql)
     return result.fetchall()
 
 def create_thread(creator_id, is_public, name) -> int:

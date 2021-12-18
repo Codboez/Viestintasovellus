@@ -41,25 +41,25 @@
                     <button class="tab-button" type="submit" name="tab" value="friends">Friends</button>
                     <button class="tab-button" type="submit" name="tab" value="requests">Requests</button>
                 </form>          
-                {% if tab == "friends" %}
+                {% if arguments.tab == "friends" %}
                     <form method="GET">
                         <input class="searchbar" type="text" name="search" placeholder="search for friends">
                     </form>
-                    {% if friends|length == 0 %}
+                    {% if arguments.friends|length == 0 %}
                         <p>You have not added any friends. Add friends below.</p>
                     {% else %}
-                        {% for friend in friends %}
+                        {% for friend in arguments.friends %}
                             <form action="/threads/get_private_thread" method="POST">
                                 <button type="submit" name="friend_id" value="{{ friend.id }}">{{ friend.username }}</button>
                                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                             </form>
                         {% endfor %}
                     {% endif %}
-                {% elif tab == "requests" %}
-                    {% if requests|length == 0 %}
+                {% elif arguments.tab == "requests" %}
+                    {% if arguments.requests|length == 0 %}
                         <p>You do not have any friend requests</p>
                     {% else %}
-                        {% for request in requests %}
+                        {% for request in arguments.requests %}
                             <div class="friend-request">
                                 <p>{{ request.username }}</p>     
                                 <form action="/send_friend_request_answer" method="POST">
@@ -74,15 +74,15 @@
                 {% endif %}
                 <hr>
                 <h3>Add friend</h3>
-                {% if friend_request == "sent" %}
+                {% if arguments.friend_request == "sent" %}
                     <p class="green-text">Friend request sent successfully</p>
-                {% elif friend_request == "friend_exists" %}
+                {% elif arguments.friend_request == "friend_exists" %}
                     <p class="red-text">This user is already your friend</p>
-                {% elif friend_request == "invalid_username" %}
+                {% elif arguments.friend_request == "invalid_username" %}
                     <p class="red-text">That username does not exist</p>
-                {% elif friend_request == "friend_request_exists" %}
+                {% elif arguments.friend_request == "friend_request_exists" %}
                     <p class="red-text">Friend request already exists</p>
-                {% elif friend_request == "self" %}
+                {% elif arguments.friend_request == "self" %}
                     <p class="red-text">You cannot send a friend request to yourself</p>
                 {% endif %}
                 <form class="sidebar-form" action="/send_friend_request" method="POST">
