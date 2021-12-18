@@ -112,9 +112,16 @@
                 <p>You must login to create new threads</p>
             {% endif %}
             <div class="thread-labels">
-                <p class="thread-name">Name</p>
-                <p class="thread-creator">Creator</p>
-                <p class="thread-date">Creation date</p>
+                <form action="/" method="GET">
+                    <button class="thread-name" name="sort" value="name">Name</button>
+                    <button class="thread-creator" name="sort" value="username">Creator</button>
+                    <button class="thread-date" name="sort" value="creation_time">Creation date</button>
+                    {% if sort[1] == "ASC" %}
+                        <input type="hidden" name="order" value="DESC">
+                    {% else %}
+                        <input type="hidden" name="order" value="ASC">
+                    {% endif %}
+                </form>
             </div>         
             <div class="clearfix"></div>
             <hr>

@@ -6,12 +6,9 @@
     </head>
     <body>
         <form action="/threads/create/send" method="POST">
-            <div>
-                <input type="text" name="name" placeholder="Title">
-            </div>
-            <div>
-                <input type="submit" value="Create thread">
-            </div>
+            <input type="text" name="name" placeholder="Title">
+            <input type="submit" value="Create thread">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"
         </form>
     </body>
 </html>

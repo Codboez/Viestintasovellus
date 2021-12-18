@@ -123,8 +123,15 @@ p {
     float: left;
 }
 
-.thread-labels {
-    font-size: 18px;
+.thread-labels button {
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    background-color: white;
+}
+
+.thread-labels button:hover {
+    background-color: #eee;
 }
 
 .red-text {

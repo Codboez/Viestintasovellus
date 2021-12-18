@@ -6,7 +6,15 @@ import secrets
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    thread_list = threads.get_all_public_threads()
+    sort_arg = request.args.get("sort")
+    order_arg = request.args.get("order")
+
+    if sort_arg == None:
+        sort_arg = "creation_time"
+
+    sort = (sort_arg, order_arg)
+    thread_list = threads.get_all_public_threads(sort)
+
     friends = []
     friend_requests = []
     if "username" in session:
@@ -16,7 +24,7 @@ def index():
     tab = request.args.get("tab")
     friend_request_message = request.args.get("friend_request")
     
-    return render_template("index.html", threads=thread_list, friends=friends, tab=tab, requests=friend_requests, friend_request=friend_request_message)
+    return render_template("index.html", threads=thread_list, friends=friends, tab=tab, requests=friend_requests, friend_request=friend_request_message, sort=sort)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -80,7 +88,7 @@ def send_created_thread():
     creator_id = users.get_id(session["username"])
     threads.create_thread(creator_id, True, request.form["name"])
     thread_id = threads.get_thread_amount()
-    return redirect("/threads/" + str(thread_id))
+    return redirect("/threads/" + str(thread_id), code=307)
 
 @app.route("/threads/<int:id>/send_message", methods=["POST"])
 def threads_send_message(id: int):
