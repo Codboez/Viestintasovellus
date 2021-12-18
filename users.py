@@ -1,6 +1,8 @@
 from db import db
 import re
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask import session
+import users
 
 def register(username, password, confirmed_password) -> tuple:
     if len(username) < 1 or len(username) > 32:
@@ -109,3 +111,15 @@ def get_username(id: int) -> str:
     sql = "SELECT username FROM users WHERE id=:id"
     result = db.session.execute(sql, {"id":id})
     return str(result.fetchone().username)
+
+def setup_sidebar_arguments(args: dict) -> dict:
+    friends = []
+    friend_requests = []
+    if "username" in session:
+        friends = users.get_friends(users.get_id(session["username"]))
+        friend_requests = users.get_friend_requests(users.get_id(session["username"]))
+
+    tab = args.get("tab")
+    friend_request_message = args.get("friend_request")
+
+    return {"friends":friends, "requests":friend_requests, "tab":tab, "friend_request":friend_request_message}

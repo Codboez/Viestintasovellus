@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Viestintäsovellus</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css')}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>     
+        <div class="topbar">
+            <div id="main-heading">
+                <p>Viestintäsovellus</p>
+            </div>
+            <div>
+                <button><i class="fa fa-bars"></i></button>
+            </div>
+            {% if session.username %}
+                <div>
+                    <form action="/logout" method="POST">
+                        <button type="submit">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <div>
+                    <form action="/login" method="POST">
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+                <div>
+                    <form action="/register" method="POST">
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+            {% endif %}
+            <div class="clearfix"></div>
+        </div>
+        <div class="sidebar">
+            <h2>Friends</h2>
+            {% if session.username %}
+                <form action="/" method="GET">
+                    <button class="tab-button" type="submit" name="tab" value="friends">Friends</button>
+                    <button class="tab-button" type="submit" name="tab" value="requests">Requests</button>
+                </form>          
+                {% if tab == "friends" %}
+                    <form method="GET">
+                        <input class="searchbar" type="text" name="search" placeholder="search for friends">
+                    </form>
+                    {% if friends|length == 0 %}
+                        <p>You have not added any friends. Add friends below.</p>
+                    {% else %}
+                        {% for friend in friends %}
+                            <form action="/threads/get_private_thread" method="POST">
+                                <button type="submit" name="friend_id" value="{{ friend.id }}">{{ friend.username }}</button>
+                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            </form>
+                        {% endfor %}
+                    {% endif %}
+                {% elif tab == "requests" %}
+                    {% if requests|length == 0 %}
+                        <p>You do not have any friend requests</p>
+                    {% else %}
+                        {% for request in requests %}
+                            <div class="friend-request">
+                                <p>{{ request.username }}</p>     
+                                <form action="/send_friend_request_answer" method="POST">
+                                    <button id="friend-request-accept" name="request_answer" value="accept"><i class="fa fa-check"></i></button>
+                                    <button id="friend-request-decline" name="request_answer" value="decline"><i class="fa fa-times"></i></button>
+                                    <input type="hidden" name="friend_id" value="{{ request.id }}">
+                                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                                </form>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+                <hr>
+                <h3>Add friend</h3>
+                {% if friend_request == "sent" %}
+                    <p class="green-text">Friend request sent successfully</p>
+                {% elif friend_request == "friend_exists" %}
+                    <p class="red-text">This user is already your friend</p>
+                {% elif friend_request == "invalid_username" %}
+                    <p class="red-text">That username does not exist</p>
+                {% elif friend_request == "friend_request_exists" %}
+                    <p class="red-text">Friend request already exists</p>
+                {% elif friend_request == "self" %}
+                    <p class="red-text">You cannot send a friend request to yourself</p>
+                {% endif %}
+                <form class="sidebar-form" action="/send_friend_request" method="POST">
+                    <input class="searchbar" type="text" name="username" placeholder="Enter username">
+                    <button id="add-friend" type="submit">Send friend request</button>
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                </form>
+            {% else %}
+                <p>Log in to access friend list</p>
+            {% endif %}
+        </div>
+        {% block content %}{% endblock %}
+    </body>
+</html>

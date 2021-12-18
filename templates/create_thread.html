@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Viestintäsovellus</title>
-    </head>
-    <body>
-        <form action="/threads/create/send" method="POST">
-            <input type="text" name="name" placeholder="Title">
-            <input type="submit" value="Create thread">
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"
-        </form>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+    <form action="/threads/create/send" method="POST">
+        <input type="text" name="name" placeholder="Title">
+        <input type="submit" value="Create thread">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+{% endblock %}
