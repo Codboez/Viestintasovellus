@@ -3,10 +3,10 @@ import users
 from flask import session
 
 def get_thread_info(id: int) -> tuple:
-    sql = "SELECT u.username, t.creation_time, t.is_public, t.name FROM users u, threads t WHERE t.id=:id AND t.creator_id=u.id"
+    sql = "SELECT u.username, to_char(t.creation_time, 'yyyy-MM-dd HH24:MI') as creation_date, t.is_public, t.name FROM users u, threads t WHERE t.id=:id AND t.creator_id=u.id"
     thread = db.session.execute(sql, {"id":id})
 
-    sql = "SELECT m.message, u.username, m.creation_time FROM messages m, users u WHERE thread_id=:id AND m.sender_id=u.id"
+    sql = "SELECT m.message, u.username, to_char(m.creation_time, 'yyyy-MM-dd HH24:MI') as creation_date FROM messages m, users u WHERE thread_id=:id AND m.sender_id=u.id"
     messages = db.session.execute(sql, {"id":id})
 
     return (thread.fetchall()[0], messages.fetchall())
@@ -47,11 +47,6 @@ def create_thread(creator_id, is_public, name) -> int:
     result = db.session.execute(sql, {"creator_id":creator_id, "is_public":is_public, "name":name})
     db.session.commit()
     return int(result.fetchone().id)
-
-def get_thread_amount() -> int:
-    sql = "SELECT COUNT(*) c FROM threads"
-    result = db.session.execute(sql)
-    return int(result.fetchone().c)
 
 def send_message(thread_id: int, sender_id: int, message: str):
     sql = "INSERT INTO messages (message, sender_id, thread_id, creation_time) VALUES (:message, :sender_id, :thread_id, current_timestamp)"

@@ -1,19 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="content">
-        <p>Created by: {{ creator }}, Created at: {{ creation_time }}</p>
+        <p class="thread-info">Created by: {{ creator }}, Created at: {{ creation_date }}</p>
         <h1 class="thread-title">{{ name }}</h1>
         <hr>
         {% for message in messages %}
-            <div>
+            <div class="message-area">
                 <p class="thread-message">{{ message.message }}</p>
-                <p class="message-info">Sender: {{ message.username }}, Sent at: {{ message.creation_time }}</p>
+                <p class="message-info">Sender: {{ message.username }}, Sent at: {{ message.creation_date }}</p>
             </div>
             <hr>
         {% endfor %}
         {% if session.username %}
             <form class="send-message" action="/threads/{{ id }}/send_message" method="POST">
-                <textarea name="message" rows="8" cols="100"></textarea>
+                <textarea name="message" rows="8" cols="100" required></textarea>
                 <input type="submit" value="Send message">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>

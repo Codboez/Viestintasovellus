@@ -19,9 +19,9 @@
         {% endif %}
         <div class="thread-labels">
             <form action="/" method="GET">
-                <button class="thread-name" name="sort" value="name">Name</button>
-                <button class="thread-creator" name="sort" value="username">Creator</button>
-                <button class="thread-date" name="sort" value="creation_time">Creation date</button>
+                <button class="thread-name" name="sort" value="name">Name{% if sort[0] == "name" %}<i class="fa sort-icon {% if sort[1] == 'DESC' %}fa-sort-down{% else %}fa-sort-up{% endif %}"></i>{% endif %}</button>
+                <button class="thread-creator" name="sort" value="username">Creator{% if sort[0] == "name" %}<i class="fa sort-icon {% if sort[1] == 'DESC' %}fa-sort-down{% else %}fa-sort-up{% endif %}"></i>{% endif %}</button>
+                <button class="thread-date" name="sort" value="creation_time">Creation date{% if sort[0] == "name" %}<i class="fa sort-icon {% if sort[1] == 'DESC' %}fa-sort-down{% else %}fa-sort-up{% endif %}"></i>{% endif %}</button>
                 {% if sort[1] == "ASC" %}
                     <input type="hidden" name="order" value="DESC">
                 {% else %}

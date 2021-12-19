@@ -1,5 +1,5 @@
 from app import app
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session, url_for, abort
 import users
 import threads
 import secrets
@@ -85,11 +85,10 @@ def create_thread():
 @app.route("/threads/create/send", methods=["POST"])
 def send_created_thread():
     if "username" not in session:
-        return abort(403)
+        abort(403)
 
     creator_id = users.get_id(session["username"])
-    threads.create_thread(creator_id, True, request.form["name"])
-    thread_id = threads.get_thread_amount()
+    thread_id = threads.create_thread(creator_id, True, request.form["name"])
     return redirect("/threads/" + str(thread_id), code=307)
 
 @app.route("/threads/<int:id>/send_message", methods=["POST"])
@@ -104,7 +103,7 @@ def threads_send_message(id: int):
         threads.send_message(id, sender_id, message)
         return redirect("/threads/" + str(id))
     else:
-        return abort(403)
+        abort(403)
 
 @app.route("/send_friend_request", methods=["POST"])
 def send_friend_request():
