@@ -24,7 +24,7 @@ def index():
 
     arguments = users.setup_sidebar_arguments(request.args)
     
-    return render_template("index.html", threads=thread_list, arguments=arguments, sort=sort)
+    return render_template("index.html", threads=thread_list, arguments=arguments, sort=sort, current="/")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -69,7 +69,8 @@ def thread(id: int):
 
     if threads.user_has_access(id, request.form.get("csrf_token"), request.method):
         arguments = users.setup_sidebar_arguments(request.args)
-        return render_template("thread.html", id=id, messages=info[1], creator=info[0].username, creation_time=info[0].creation_time, name=info[0].name, arguments=arguments)
+        return (render_template("thread.html", id=id, messages=info[1], creator=info[0].username, creation_time=info[0].creation_date, 
+            name=info[0].name, arguments=arguments, current="/threads/" + str(id)))
     else:
         abort(403)
 
@@ -80,15 +81,20 @@ def access_denied():
 @app.route("/threads/create", methods=["GET", "POST"])
 def create_thread():
     arguments = users.setup_sidebar_arguments(request.args)
-    return render_template("create_thread.html", arguments=arguments)
+    return render_template("create_thread.html", arguments=arguments, current="/threads/create")
 
 @app.route("/threads/create/send", methods=["POST"])
 def send_created_thread():
     if "username" not in session:
         abort(403)
 
+    name = request.form["name"]
+
+    if len(name) > 50:
+        abort(400)
+
     creator_id = users.get_id(session["username"])
-    thread_id = threads.create_thread(creator_id, True, request.form["name"])
+    thread_id = threads.create_thread(creator_id, True, name)
     return redirect("/threads/" + str(thread_id), code=307)
 
 @app.route("/threads/<int:id>/send_message", methods=["POST"])

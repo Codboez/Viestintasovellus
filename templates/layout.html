@@ -11,9 +11,6 @@
             <div id="main-heading">
                 <p>Viestintäsovellus</p>
             </div>
-            <div>
-                <button><i class="fa fa-bars"></i></button>
-            </div>
             {% if session.username %}
                 <div>
                     <form action="/logout" method="POST">
@@ -37,14 +34,12 @@
         <div class="sidebar">
             <h2>Friends</h2>
             {% if session.username %}
-                <form action="/" method="GET">
+                <form action="{{ current }}" method="GET">
                     <button class="tab-button" type="submit" name="tab" value="friends">Friends</button>
                     <button class="tab-button" type="submit" name="tab" value="requests">Requests</button>
                 </form>          
                 {% if arguments.tab == "friends" %}
-                    <form method="GET">
-                        <input class="searchbar" type="text" name="search" placeholder="search for friends">
-                    </form>
+                    <hr>
                     {% if arguments.friends|length == 0 %}
                         <p>You have not added any friends. Add friends below.</p>
                     {% else %}

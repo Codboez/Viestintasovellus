@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="content">
-        <p class="thread-info">Created by: {{ creator }}, Created at: {{ creation_date }}</p>
+        <p class="thread-info">Created by: {{ creator }}, Created at: {{ creation_time }}</p>
         <h1 class="thread-title">{{ name }}</h1>
         <hr>
         {% for message in messages %}

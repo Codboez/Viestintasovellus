@@ -7,7 +7,9 @@
     </head>
     <body>
         <form action="/login/send" method="POST">
+            {% if error != None %}
             <p class="red-text">{{ error }}</p>
+            {% endif %}
             <div>
                 <input type="text" placeholder="username" name="username" required>
             </div>
