@@ -156,6 +156,60 @@ p {
     margin-left: 10px;
 }
 
+.new-thread {
+    background-color: #ddd;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    padding-top: 20px;
+}
+
+.new-thread input {
+    width: 80%;
+    border: none;
+    background-color: white;
+    padding: 8px;
+    margin-top: 20px;
+}
+
+.thread-message {
+    font-size: 18px;
+    margin: 20px;
+    margin-bottom: 50px;
+    width: 90%;
+    overflow-wrap: break-word;
+}
+
+.message-info {
+    font-size: 12px;
+}
+
+.thread-title {
+    text-align: left;
+    margin: 20px;
+}
+
+.send-message {
+    margin-top: 30px;
+}
+
+.send-message input {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background-color: #99a;
+    padding: 10px;
+}
+
+.send-message input:hover {
+    background-color: #aab;
+}
+
+.send-message textarea {
+    width: 100%;
+}
+
 #create-thread {
     background-color: #99a;
     padding: 10px;

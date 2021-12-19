@@ -16,7 +16,11 @@ def index():
         order_arg = "ASC"
 
     sort = (sort_arg, order_arg)
-    thread_list = threads.get_all_public_threads(sort)
+
+    try:
+        thread_list = threads.get_all_public_threads(sort)
+    except ValueError:
+        abort(403)
 
     arguments = users.setup_sidebar_arguments(request.args)
     
@@ -59,11 +63,11 @@ def logout():
 def invalid_credentials():
     return render_template("invalid_credentials.html")
 
-@app.route("/threads/<int:id>", methods=["POST"])
+@app.route("/threads/<int:id>", methods=["GET", "POST"])
 def thread(id: int):
     info = threads.get_thread_info(id)
 
-    if threads.user_has_access(id, request.form["csrf_token"]):
+    if threads.user_has_access(id, request.form.get("csrf_token"), request.method):
         arguments = users.setup_sidebar_arguments(request.args)
         return render_template("thread.html", id=id, messages=info[1], creator=info[0].username, creation_time=info[0].creation_time, name=info[0].name, arguments=arguments)
     else:
@@ -96,7 +100,7 @@ def threads_send_message(id: int):
     if "username" not in session:
         abort(403)
 
-    if threads.user_has_access(id, request.form["csrf_token"]):
+    if threads.user_has_access(id, request.form["csrf_token"], "POST"):
         threads.send_message(id, sender_id, message)
         return redirect("/threads/" + str(id))
     else:
@@ -151,7 +155,7 @@ def get_private_thread():
     friend_id = request.form["friend_id"]
     thread_id = threads.create_and_get_private_thread(user_id, friend_id)
 
-    if threads.user_has_access(thread_id, request.form["csrf_token"]):
+    if threads.user_has_access(thread_id, request.form["csrf_token"], "POST"):
         return redirect("/threads/" + str(thread_id), code=307)
     else:
         abort(403)

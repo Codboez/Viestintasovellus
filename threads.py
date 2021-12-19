@@ -11,7 +11,7 @@ def get_thread_info(id: int) -> tuple:
 
     return (thread.fetchall()[0], messages.fetchall())
 
-def user_has_access(thread_id, csrf_token) -> bool:
+def user_has_access(thread_id, csrf_token, method) -> bool:
     is_thread_public = is_public(thread_id)
 
     if is_thread_public:
@@ -22,7 +22,7 @@ def user_has_access(thread_id, csrf_token) -> bool:
 
     user_id = users.get_id(session["username"])
 
-    if session["csrf_token"] != csrf_token:
+    if method == "POST" and session["csrf_token"] != csrf_token:
         return False
     
     sql = "SELECT * FROM thread_users WHERE user_id=:user_id AND thread_id=:thread_id;"
@@ -31,10 +31,10 @@ def user_has_access(thread_id, csrf_token) -> bool:
 
 def get_all_public_threads(sort: tuple) -> list:
     if sort[0] != "name" and sort[0] != "username" and sort[0] != "creation_time":
-        abort(403)
+        raise ValueError()
 
     if sort[1] != "ASC" and sort[1] != "DESC":
-        abort(403)
+        raise ValueError()
 
     sort_sql = sort[0] + " " + sort[1]
     sql = ("SELECT t.id, to_char(t.creation_time, 'yyyy-MM-dd HH24:MI') as creation_date, t.name, u.username"
